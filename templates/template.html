@@ -5,6 +5,11 @@
     <title>Todo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <style>
+        body{
+            background-image: url("{{ url_for('static', filename='images/Notepads.jpg') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
         h1 {
             text-align: center;
             color: rgb(39, 39, 50);
@@ -18,8 +23,10 @@
             border: 10px solid rgb(90, 138, 229);
             padding: 50px;
             position: relative;
-            top: 130px;
+            top: 100px;
             left: 200px;
+            background-color: #eac1c1;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
         }
         #result {
             width: 300px;
@@ -28,6 +35,8 @@
             position: absolute;
             top: 200px;
             right: 200px;
+            background-color: #eac1c1;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
         }
         .question {
             display: none;
@@ -55,7 +64,7 @@
             <div id="edit" class="question">
                 <label for="editTask" class="form-label">What to edit?</label>
                 <input type="number" name="EDIT" class="form-control" id="editTask" placeholder="Enter the Task number">
-                <label for="edittask2" class="form-label">Enter the new Task</label>
+                <label for="editTask2" class="form-label">Enter the new Task</label>
                 <input type="text" name="EDIT_ACTION" class="form-control" id="editTask2">
             </div>
             <div id="complete" class="question">
@@ -87,7 +96,9 @@
             }
         });
 
-        document.getElementById("todoForm").addEventListener("submit", function(event) {
+        //The below is for displaying default alert box
+
+        /*document.getElementById("todoForm").addEventListener("submit", function(event) {
             var action = document.getElementById("inputState").value;
             var isValid = true;
 
@@ -95,29 +106,50 @@
                 var task = document.getElementById("task").value;
                 if (!task) {
                     isValid = false;
-                    alert("Please enter a task to add.");
+                    //alert("Please enter a task to add.");
                 }
             } else if (action === "edit") {
                 var editTask = document.getElementById("editTask").value;
                 var editAction = document.getElementById("editTask2").value;
                 if (!editTask || !editAction) {
                     isValid = false;
-                    alert("Please enter the task number and new task for editing.");
+                    //alert("Please enter the task number and new task for editing.");
                 }
+            
             } else if (action === "complete") {
                 var completeTask = document.getElementById("completeTask").value;
                 if (!completeTask) {
                     isValid = false;
-                    alert("Please enter the task number to complete.");
+                    //alert("Please enter the task number to complete.");
                 }
             }
             else if (action === "Choose..."){
-                alert("Please Choose an Action.");
+                //alert("Please Choose an Action.");
+                isValid = false;
             }
             if (!isValid) {
                 event.preventDefault(); // Prevent form submission if validation fails
             }
-        });
+        });*/
+
+        setTimeout(function() {
+            var alertElement = document.getElementById("flashAlert");
+            if (alertElement) {
+                alertElement.style.display = 'none';
+            }
+        }, 3000);//for 3 seconds, Alert box is displayed
     </script>
+
+    <div class="container mt-2">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-warning" id="flashAlert">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
 </body>
 </html>
