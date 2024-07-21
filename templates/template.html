@@ -5,79 +5,104 @@
     <title>Todo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <style>
-        body{
+        body {
             background-image: url("{{ url_for('static', filename='images/Notepads.jpg') }}");
             background-size: cover;
             background-repeat: no-repeat;
+            font-family: 'Arial', sans-serif;
+            color: #272732;
         }
         h1 {
             text-align: center;
-            color: rgb(39, 39, 50);
+            color: #272732;
             margin-top: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         }
         h3 {
             text-align: center;
+            color: #272732;
         }
         #action_todo {
             width: 400px;
-            border: 10px solid rgb(90, 138, 229);
-            padding: 50px;
-            position: relative;
-            top: 100px;
-            left: 200px;
-            background-color: #eac1c1;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+            border: 2px solid #5A8AE5;
+            padding: 30px;
+            margin: 50px auto;
+            background-color: rgba(234, 193, 193, 0.9);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            transition: transform 0.3s ease-in-out;
+        }
+        #action_todo:hover {
+            transform: scale(1.05);
         }
         #result {
-            width: 300px;
-            border: 10px solid rgb(90, 138, 229);
-            padding: 50px;
-            position: absolute;
-            top: 200px;
-            right: 200px;
-            background-color: #eac1c1;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+            width: 400px;
+            border: 2px solid #5A8AE5;
+            padding: 30px;
+            margin: 50px auto;
+            background-color: rgba(234, 193, 193, 0.9);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            transition: transform 0.3s ease-in-out;
+        }
+        #result:hover {
+            transform: scale(1.05);
         }
         .question {
             display: none;
+            transition: opacity 0.5s ease-in-out;
         }
-
-                
+        .show {
+            display: block;
+            opacity: 1;
+        }
+        .hide {
+            opacity: 0;
+        }
     </style>
 </head>
 <body>
     <h1>Todo List</h1>
-    <div class="col-md-4" id="action_todo">
+    <div id="action_todo">
         <form id="todoForm" action="/submit" method="post">
-            <label for="inputState" class="form-label">Action</label>
-            <select id="inputState" name="action" class="form-select">
-                <option selected>Choose...</option>
-                <option value="add">Add</option>
-                <option value="show">Show</option>
-                <option value="edit">Edit</option>
-                <option value="complete">Complete</option>
-            </select>
-            <br>
-        
+            <div class="mb-3">
+                <label for="inputState" class="form-label">Action</label>
+                <select id="inputState" name="action" class="form-select">
+                    <option selected>Choose...</option>
+                    <option value="add">Add</option>
+                    <option value="show">Show</option>
+                    <option value="edit">Edit</option>
+                    <option value="complete">Complete</option>
+                </select>
+            </div>
+            
             <div id="add" class="question">
-                <label for="task" class="form-label">What to do?</label>
-                <input type="text" name="ADD" class="form-control" id="task">
+                <div class="mb-3">
+                    <label for="task" class="form-label">What to do?</label>
+                    <input type="text" name="ADD" class="form-control" id="task">
+                </div>
             </div>
             <div id="edit" class="question">
-                <label for="editTask" class="form-label">What to edit?</label>
-                <input type="number" name="EDIT" class="form-control" id="editTask" placeholder="Enter the Task number">
-                <label for="editTask2" class="form-label">Enter the new Task</label>
-                <input type="text" name="EDIT_ACTION" class="form-control" id="editTask2">
+                <div class="mb-3">
+                    <label for="editTask" class="form-label">What to edit?</label>
+                    <input type="number" name="EDIT" class="form-control" id="editTask" placeholder="Enter the Task number">
+                </div>
+                <div class="mb-3">
+                    <label for="editTask2" class="form-label">Enter the new Task</label>
+                    <input type="text" name="EDIT_ACTION" class="form-control" id="editTask2">
+                </div>
             </div>
             <div id="complete" class="question">
-                <label for="completeTask" class="form-label">What to Complete?</label>
-                <input type="number" name="COMPLETE" class="form-control" id="completeTask" placeholder="Enter the Task number">
+                <div class="mb-3">
+                    <label for="completeTask" class="form-label">What to Complete?</label>
+                    <input type="number" name="COMPLETE" class="form-control" id="completeTask" placeholder="Enter the Task number">
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+            <button type="submit" class="btn btn-primary w-100">Submit</button>
         </form>
     </div>
 
-    <div class="col-md-4" id="result">
+    <div id="result">
         <h3>List of Todo</h3>
         <p id="show">
             {% for todo in todos %}
@@ -90,56 +115,22 @@
         document.getElementById("inputState").addEventListener("change", function() {
             var questions = document.getElementsByClassName("question");
             for (var i = 0; i < questions.length; i++) {
-                questions[i].style.display = "none";
+                questions[i].classList.remove("show");
+                questions[i].classList.add("hide");
             }
             var chosenOption = this.value;
             if (chosenOption && chosenOption !== "Choose...") {
-                document.getElementById(chosenOption).style.display = "block";
+                document.getElementById(chosenOption).classList.add("show");
+                document.getElementById(chosenOption).classList.remove("hide");
             }
         });
-
-        //The below is for displaying default alert box
-
-        /*document.getElementById("todoForm").addEventListener("submit", function(event) {
-            var action = document.getElementById("inputState").value;
-            var isValid = true;
-
-            if (action === "add") {
-                var task = document.getElementById("task").value;
-                if (!task) {
-                    isValid = false;
-                    //alert("Please enter a task to add.");
-                }
-            } else if (action === "edit") {
-                var editTask = document.getElementById("editTask").value;
-                var editAction = document.getElementById("editTask2").value;
-                if (!editTask || !editAction) {
-                    isValid = false;
-                    //alert("Please enter the task number and new task for editing.");
-                }
-            
-            } else if (action === "complete") {
-                var completeTask = document.getElementById("completeTask").value;
-                if (!completeTask) {
-                    isValid = false;
-                    //alert("Please enter the task number to complete.");
-                }
-            }
-            else if (action === "Choose..."){
-                //alert("Please Choose an Action.");
-                isValid = false;
-            }
-            if (!isValid) {
-                event.preventDefault(); // Prevent form submission if validation fails
-            }
-        });*/
 
         setTimeout(function() {
             var alertElement = document.getElementById("flashAlert");
             if (alertElement) {
                 alertElement.style.display = 'none';
             }
-        }, 3000);//for 3 seconds, Alert box is displayed
+        }, 3000);
     </script>
 
     <div class="container mt-2">
