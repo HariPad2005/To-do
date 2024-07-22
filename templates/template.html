@@ -11,41 +11,41 @@
             background-repeat: no-repeat;
             font-family: 'Arial', sans-serif;
             color: #272732;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container-title {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
         }
         h1 {
             text-align: center;
             color: #272732;
-            margin-top: 20px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 2.5rem;
+            font-weight: bold;
         }
         h3 {
             text-align: center;
             color: #272732;
         }
-        #action_todo {
+        #action_todo, #result {
             width: 400px;
             border: 2px solid #5A8AE5;
             padding: 30px;
-            margin: 50px auto;
+            margin: 20px auto;
             background-color: rgba(234, 193, 193, 0.9);
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
             transition: transform 0.3s ease-in-out;
         }
-        #action_todo:hover {
-            transform: scale(1.05);
-        }
-        #result {
-            width: 400px;
-            border: 2px solid #5A8AE5;
-            padding: 30px;
-            margin: 50px auto;
-            background-color: rgba(234, 193, 193, 0.9);
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
-            transition: transform 0.3s ease-in-out;
-        }
-        #result:hover {
+        #action_todo:hover, #result:hover {
             transform: scale(1.05);
         }
         .question {
@@ -62,7 +62,9 @@
     </style>
 </head>
 <body>
-    <h1>Todo List</h1>
+    <div class="container-title">
+        <h1>Todo List</h1>
+    </div>
     <div id="action_todo">
         <form id="todoForm" action="/submit" method="post">
             <div class="mb-3">
