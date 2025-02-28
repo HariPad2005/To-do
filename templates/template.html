@@ -4,62 +4,8 @@
     <meta charset="UTF-8"/>
     <title>Todo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <style>
-        body {
-            background-image: url("{{ url_for('static', filename='images/Notepads.jpg') }}");
-            background-size: cover;
-            background-repeat: no-repeat;
-            font-family: 'Arial', sans-serif;
-            color: #272732;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        .container-title {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-        h1 {
-            text-align: center;
-            color: #272732;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            font-size: 2.5rem;
-            font-weight: bold;
-        }
-        h3 {
-            text-align: center;
-            color: #272732;
-        }
-        #action_todo, #result {
-            width: 400px;
-            border: 2px solid #5A8AE5;
-            padding: 30px;
-            margin: 20px auto;
-            background-color: rgba(234, 193, 193, 0.9);
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
-            transition: transform 0.3s ease-in-out;
-        }
-        #action_todo:hover, #result:hover {
-            transform: scale(1.05);
-        }
-        .question {
-            display: none;
-            transition: opacity 0.5s ease-in-out;
-        }
-        .show {
-            display: block;
-            opacity: 1;
-        }
-        .hide {
-            opacity: 0;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
 </head>
 <body>
     <div class="container-title">

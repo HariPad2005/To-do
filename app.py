@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 
 app = Flask(__name__)
 app.secret_key = 'AZBYCX'
@@ -75,6 +75,46 @@ def submit():
 
     return redirect(url_for('todo'))
 
+# REST API Endpoints
+
+
+@app.route("/api/todos", methods=["GET"])
+def get_todos():
+    return jsonify({"todos": todos})
+
+@app.route("/api/todo", methods=["POST"])
+def add_todo():
+    data = request.json
+    task = data.get("task")
+    if task:
+        todos.append(task)
+        return jsonify({"message": "Task added successfully", "todos": todos}), 201
+    return jsonify({"error": "Task content is missing"}), 400
+
+@app.route("/api/todo/<int:index>", methods=["GET"])
+def get_specific_todo(index):
+    """ Retrieve a specific task by its index. """
+    if 0 <= index < len(todos):
+        return jsonify({"task": todos[index]})
+    return jsonify({"error": "Invalid task index"}), 404
+
+@app.route("/api/todo/<int:index>", methods=["PUT"])
+def update_todo(index):
+    data = request.json
+    new_task = data.get("task")
+    if 0 <= index < len(todos):
+        todos[index] = new_task
+        return jsonify({"message": "Task updated successfully", "todos": todos})
+    return jsonify({"error": "Invalid task index"}), 404
+
+@app.route("/api/todo/<int:index>", methods=["DELETE"])
+def delete_todo(index):
+    if 0 <= index < len(todos):
+        todos.pop(index)
+        return jsonify({"message": "Task deleted successfully", "todos": todos})
+    return jsonify({"error": "Invalid task index"}), 404
+
 if __name__ == "__main__":
     app.debug = True
     app.run()
+
