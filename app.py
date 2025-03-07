@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 app = Flask(__name__)
 app.secret_key = 'AZBYCX'
 todos = []
+students = []
 
 @app.route("/", methods=["GET", "POST"])
 def todo():
@@ -113,6 +114,64 @@ def delete_todo(index):
         todos.pop(index)
         return jsonify({"message": "Task deleted successfully", "todos": todos})
     return jsonify({"error": "Invalid task index"}), 404
+
+# In-memory database for students
+
+# Get all students
+@app.route("/get_students", methods=["GET"])
+def get_students():
+    return jsonify({"students": students})
+
+# Add a new student
+@app.route("/add_student", methods=["POST"])
+def add_student():
+    data = request.json
+    name = data.get("name")
+    department = data.get("department")
+    student_id = data.get("id")
+    
+    if name and department and student_id:
+        student = {"name": name, "department": department, "id": student_id}
+        students.append(student)
+        return jsonify({"message": "Student added successfully", "students": students}), 201
+    
+    return jsonify({"error": "Missing student data"}), 400
+
+# Get a specific student by ID
+@app.route("/get_student/<int:student_id>", methods=["GET"])
+def get_specific_student(student_id):
+    """ Retrieve a specific student by their ID. """
+    student = next((s for s in students if s['id'] == student_id), None)
+    if student:
+        return jsonify({"student": student})
+    return jsonify({"error": "Student not found"}), 404
+
+# Update a specific student's information
+@app.route("/update_student/<int:student_id>", methods=["PUT"])
+def update_student(student_id):
+    data = request.json
+    name = data.get("name")
+    department = data.get("department")
+    
+    student = next((s for s in students if s['id'] == student_id), None)
+    if student:
+        if name:
+            student['name'] = name
+        if department:
+            student['department'] = department
+        return jsonify({"message": "Student updated successfully", "students": students})
+    
+    return jsonify({"error": "Student not found"}), 404
+
+# Delete a specific student by ID
+@app.route("/delete_student/<int:student_id>", methods=["DELETE"])
+def delete_student(student_id):
+    student = next((s for s in students if s['id'] == student_id), None)
+    if student:
+        students.remove(student)
+        return jsonify({"message": "Student deleted successfully", "students": students})
+    
+    return jsonify({"error": "Student not found"}), 404
 
 if __name__ == "__main__":
     app.debug = True
